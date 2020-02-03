@@ -1,22 +1,34 @@
 # coding=utf-8
 import sys
-from threading import Thread
+### server library
 import tornado.ioloop
 import tornado.web
 import tornado.httpserver
 import tornado.websocket
-import queue
-import pyperclip  # for copy the link  to the clipboard
 from tornado.escape import json_decode
+
+# for copy the link  to the clipboard
+import pyperclip
+
+##for generating QRCode
+import qrcode
+#for storing the data from the client
+import queue
+
+#import ui files
 from ui import Ui_MainWindow
 from qrcode_ui import Ui_Dialog
-import qrcode  ##for generating QRCode
+# for the ui style
+import qdarkstyle
+
+#gui essential library
 from PySide2.QtCore import QTimer, Qt, QPropertyAnimation, QPoint, QEasingCurve, Signal, QObject, QThread
 from PySide2.QtGui import QFont, QPainter, QColor, QPainterPath, QFontMetrics, QPen, QBrush, QPixmap, QImage, QCursor
 from PySide2.QtWidgets import QLabel, QApplication, QDialog, QMainWindow, QMessageBox, QDesktopWidget
 
+#for translating localhost to public
 from pyngrok import ngrok
-import qdarkstyle
+
 
 
 # stroing the data when receiving
@@ -25,10 +37,9 @@ class store_info():
         self.text = str
         self.color = color
 
-
-class MySignal(QObject):  # global signal for hiding the finished danmaku
+# it is a global signal for hiding the finished danmaku
+class MySignal(QObject):
     sig = Signal(str, str)
-
 
 signal = MySignal()
 
@@ -81,6 +92,7 @@ class serverThread(QThread):
 
         def post(self):
             # data
+            # import gloal signal
             global signal
 
             t = json_decode(self.request.body)  # type is dic
@@ -108,8 +120,6 @@ class scrollTextLabel(QLabel):
             self.color = QColor(0, 160, 234, 255)  # Blue
 
         self.font = QFont("Helvetica", scale)  # 20 25 30
-        # "Microsoft YaHei" 微軟雅黑）
-
         self.txt = text
         self.speed = speed  # between 50 ~ 120
 
@@ -121,12 +131,12 @@ class scrollTextLabel(QLabel):
         self.setFixedWidth(self.metrics.width(self.txt) + 10)
         self.setFixedHeight(self.metrics.height() + 5)
 
-        self.move(Rect.x() + Rect.width() * 0.97, Rect.y() + 50 * line)
+        #self.move(Rect.x() + Rect.width() * 0.97, Rect.y() + 50 * line)
         self.setFocusPolicy(Qt.NoFocus)
         self.hide()
         self.anim = QPropertyAnimation(self, 'pos')
         self.anim.setDuration(self.speed * 100)
-        self.anim.setStartValue(QPoint(Rect.x() + Rect.width() * 0.97, Rect.y() + 50 * line))
+        self.anim.setStartValue(QPoint(Rect.x() + Rect.width() * 0.95, Rect.y() + 50 * line))
         self.anim.setEndValue(QPoint(-self.width() + Rect.x(), Rect.y() + 50 * line))
         self.anim.setEasingCurve(QEasingCurve.Linear)
 
@@ -187,7 +197,6 @@ class Image(qrcode.image.base.BaseImage):
             self.box_size, self.box_size,
             Qt.black)
 
-
 class MyPopup(QDialog, Ui_Dialog):
     def __init__(self, parent=None):
         super(MyPopup, self).__init__(parent)
@@ -203,7 +212,7 @@ class MyPopup(QDialog, Ui_Dialog):
         self.btn_ok.clicked.connect(self.hide)
 
     def copy_url(self):
-        pyperclip.copy('The text to be copied to the clipboard.')
+        pyperclip.copy(self.link)
         self.messagebox = QMessageBox(self)
         dark_stylesheet = qdarkstyle.load_stylesheet_pyside2()
         self.messagebox.setStyleSheet(dark_stylesheet)
@@ -254,12 +263,12 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
     # generating the danmaku (產生彈幕）
     def popupMsg(self, str, color):
-        # print (color)
         color = color
-        self.textEdit.insertHtml("<p style='color:white;'>" + str + "</p>") #主要以白色 來顯示
+        #以白色來顯示
+        self.textEdit.insertHtml("<p style='color:white;'>" + str + "</p>") 
         self.textEdit.append('')
         w = scrollTextLabel(str, self.screenRect, self.scale, self.speed, self.line, color)
-        w.setGeometry(self.screenRect)
+        #w.setGeometry(self.screenRect)
         self.window_list.append(w)
         if self.line == 0:
             self.line = 1
@@ -277,12 +286,10 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.screen_num = 0  # default setting is main screen
         self.speed = 50  # between 50 ~ 120
         self.line = 0
-        # default setting
-
+        
         self.textEdit.setReadOnly(True)
 
         self.Qrcode_msg = MyPopup()
-
         self.Qrcode_msg.hide()
 
         self.serverThread = serverThread(self.window())
