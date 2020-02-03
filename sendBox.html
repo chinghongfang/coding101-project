@@ -222,6 +222,12 @@
 			let data = document.getElementById('ans').value
 			return data
 		}
+		var web_head = location.href.slice(0,-13);
+		console.log(web_head);
+		web_head = web_head.replace(/\//g,'');
+		web_head = web_head.replace(/:/g,'');
+		web_head = web_head.replace(/\./g,'');
+		console.log(web_head);
 	</script>
 	
 	<script src="https://unpkg.com/swiper/js/swiper.js"></script>
@@ -288,7 +294,7 @@
 			}
 			
 			
-			firebase.database().ref('/chatroom/'+time).set({
+			firebase.database().ref('/chatroom/'+web_head+'/'+time).set({
 				message: text_to_send,
 				color:	color
 			});

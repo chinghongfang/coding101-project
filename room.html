@@ -44,8 +44,24 @@
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
-	firebase.database().ref('/chatroom').set({1234: 1});
+  
+	// initializing chatting room
+	// using the web href as a header. To create an indivisual chatroom.
+	var web_head = location.href.slice(0,-10);
+	web_head = web_head.replace(/\//g,'');
+	web_head = web_head.replace(/:/g,'');
+	web_head = web_head.replace(/\./g,'');
+	firebase.database().ref('/chatroom').once('value').then(function(snapshot) {
+		console.log(snapshot.val());
+		// to check if the room exists
+		if (snapshot.val().hasOwnProperty(web_head)){
+			return;
+		}
+		firebase.database().ref('/chatroom/'+web_head).set({1234:1});
+	});
+	
 	function updateroom(time_stamp){
+		time_stamp = time_stamp[web_head];
 		let keys = Object.keys(time_stamp);
 		let all_text = "";
 		keys.forEach(function(key){
