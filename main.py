@@ -10,25 +10,27 @@ from tornado.escape import json_decode
 # for copy the link  to the clipboard
 import pyperclip
 
+import json
+
 ##for generating QRCode
 import qrcode
-#for storing the data from the client
+# for storing the data from the client
 import queue
 
-#import ui files
+# import ui files
 from ui import Ui_MainWindow
 from qrcode_ui import Ui_Dialog
+from dialog import Dialog
 # for the ui style
 import qdarkstyle
 
-#gui essential library
+# gui essential library
 from PySide2.QtCore import QTimer, Qt, QPropertyAnimation, QPoint, QEasingCurve, Signal, QObject, QThread
 from PySide2.QtGui import QFont, QPainter, QColor, QPainterPath, QFontMetrics, QPen, QBrush, QPixmap, QImage, QCursor
 from PySide2.QtWidgets import QLabel, QApplication, QDialog, QMainWindow, QMessageBox, QDesktopWidget
 
-#for translating localhost to public
+# for translating localhost to public
 from pyngrok import ngrok
-
 
 
 # stroing the data when receiving
@@ -37,9 +39,11 @@ class store_info():
         self.text = str
         self.color = color
 
+
 # it is a global signal for hiding the finished danmaku
 class MySignal(QObject):
     sig = Signal(str, str)
+
 
 signal = MySignal()
 
@@ -107,7 +111,7 @@ class serverThread(QThread):
 class scrollTextLabel(QLabel):
     deletesig = Signal()
 
-    def __init__(self, text, Rect, scale, speed, line, color, parent=None):
+    def __init__(self, text, Rect, scale, speed, line, color, bold, parent=None):
         super(scrollTextLabel, self).__init__(parent)
 
         if color == 'red':
@@ -118,8 +122,10 @@ class scrollTextLabel(QLabel):
             self.color = QColor(144, 195, 32, 255)  # Grass
         elif color == 'Blue':
             self.color = QColor(0, 160, 234, 255)  # Blue
-
-        self.font = QFont("Helvetica", scale)  # 20 25 30
+        if bold:
+            self.font = QFont("Helvetica", scale, QFont.Bold)  # 20 25 30 粗體
+        else:
+            self.font = QFont("Helvetica", scale)
         self.txt = text
         self.speed = speed  # between 50 ~ 120
 
@@ -131,7 +137,7 @@ class scrollTextLabel(QLabel):
         self.setFixedWidth(self.metrics.width(self.txt) + 10)
         self.setFixedHeight(self.metrics.height() + 5)
 
-        #self.move(Rect.x() + Rect.width() * 0.97, Rect.y() + 50 * line)
+        # self.move(Rect.x() + Rect.width() * 0.97, Rect.y() + 50 * line)
         self.setFocusPolicy(Qt.NoFocus)
         self.hide()
         self.anim = QPropertyAnimation(self, 'pos')
@@ -197,6 +203,7 @@ class Image(qrcode.image.base.BaseImage):
             self.box_size, self.box_size,
             Qt.black)
 
+
 class MyPopup(QDialog, Ui_Dialog):
     def __init__(self, parent=None):
         super(MyPopup, self).__init__(parent)
@@ -205,8 +212,8 @@ class MyPopup(QDialog, Ui_Dialog):
         self.setStyleSheet(dark_stylesheet)
         self.link = ''
         self.setWindowFlags(
-                        Qt.WindowStaysOnTopHint|
-                        Qt.WindowCloseButtonHint)  # 隱藏 FramelessWindow
+            Qt.WindowStaysOnTopHint |
+            Qt.WindowCloseButtonHint)  # 隱藏 FramelessWindow
 
         self.btn_copy.clicked.connect(self.copy_url)
         self.btn_ok.clicked.connect(self.hide)
@@ -241,12 +248,13 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.window_list = []
         self.timer = QTimer()
 
-
         self.timer.timeout.connect(self.pop_msg)
         self.init()
         self.timer.start(1500)  # 2 seconds
         # self.popupMsg('hihi') # for testing the danmaku
 
+    def change_transparent(self):
+        self.setWindowOpacity(self.transparent_slider.value() / 100.0)
 
     def pop_msg(self):
         if not self.Msg_queue.empty():
@@ -264,11 +272,11 @@ class MyWindow(QMainWindow, Ui_MainWindow):
     # generating the danmaku (產生彈幕）
     def popupMsg(self, str, color):
         color = color
-        #以白色來顯示
-        self.textEdit.insertHtml("<p style='color:white;'>" + str + "</p>") 
+        # 以白色來顯示
+        bold = self
+        self.textEdit.insertHtml("<p style='color:white;'>" + str + "</p>")
         self.textEdit.append('')
-        w = scrollTextLabel(str, self.screenRect, self.scale, self.speed, self.line, color)
-        #w.setGeometry(self.screenRect)
+        w = scrollTextLabel(str, self.screenRect, self.scale, self.speed, self.line, color, self.isBold.isChecked())
         self.window_list.append(w)
         if self.line == 0:
             self.line = 1
@@ -278,16 +286,42 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
     def init(self):
         self.setWindowFlags(
-                        Qt.FramelessWindowHint |
-                        Qt.WindowCloseButtonHint)
+            Qt.FramelessWindowHint |
+            Qt.WindowCloseButtonHint)
         # default setting
-        self.checkBox_2.setCheckState(Qt.Checked)  # for scale middle (中)
-        self.scale = 25  # 20 25 30
+
         self.screen_num = 0  # default setting is main screen
-        self.speed = 50  # between 50 ~ 120
         self.line = 0
-        
-        self.textEdit.setReadOnly(True)
+        #######
+
+        try:
+            read_file = open("record.json", "r")
+            dic_data = json.load(read_file)
+            read_file.close()
+            self.speed = dic_data['speed']
+            self.scale = dic_data['scale']
+            if self.scale == 20:
+                self.checkBox_1.setCheckState(Qt.Checked)
+            elif self.scale == 25:
+                self.checkBox_2.setCheckState(Qt.Checked)
+            elif self.scale == 30:
+                self.checkBox_3.setCheckState(Qt.Checked)
+            else:
+                self.checkBox_2.setCheckState(Qt.Checked)
+
+            self.transparent_slider.setValue(dic_data['transparent'])
+            if dic_data['bold']:
+                self.isBold.setChecked(Qt.Checked)
+
+        except:
+            self.checkBox_2.setCheckState(Qt.Checked)  # for scale middle (中)
+            self.speed = 50  # between 50 ~ 120
+            self.scale = 25  # 20 25 30
+            self.transparent_slider.setValue(100)
+
+        self.Speed_Slider.setValue(self.speed)
+
+        self.is_save = True
 
         self.Qrcode_msg = MyPopup()
         self.Qrcode_msg.hide()
@@ -297,6 +331,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.public_url = ngrok.connect(8888)
         self.Qrcode_msg.setLink(self.public_url)
 
+        self.textEdit.setReadOnly(True)
         self.textEdit.insertHtml(
             "<p style='color:red;'>--------------------------Connected!--------------------------</p>")
         self.textEdit.append('')
@@ -319,6 +354,57 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         # signal.sig.connect(self.popupMsg)
         signal.sig.connect(self.add_to_queue)
         self.onBindingUI()
+        # self.setting_info()
+
+    def save(self):
+        if self.auto_save.isChecked():
+            self.is_save = True
+        else:
+            self.is_save = False
+
+    def write(self):
+        fp = open("record.json", "w")
+
+        data = {'speed': self.speed, 'scale': self.scale, 'bold': self.isBold.isChecked(),
+                'transparent': self.transparent_slider.value()}
+        ret = json.dumps(data)
+        fp.write(ret)
+        fp.close()
+
+    def setting_info(self):
+        print('speed ' + str(self.speed))
+        print ('scale ' + str(self.scale))
+        print ('bold ' + str(self.isBold.isChecked()))
+        print ('transparent ' + str(self.transparent_slider.value()))
+
+    def onBindingUI(self):
+        ###init ui default setting and connect the signals with ui
+
+        self.auto_save.setChecked(Qt.Checked)
+        self.auto_save.clicked.connect(self.save)
+
+        self.checkBox_1.stateChanged.connect(self.checkbox1_changed)
+        self.checkBox_2.stateChanged.connect(self.checkbox2_changed)
+        self.checkBox_3.stateChanged.connect(self.checkbox3_changed)
+        self.Speed_Slider.valueChanged.connect(self.change_label_speed)
+        self.Speed_Slider.setMaximum(120)
+        self.Speed_Slider.setMinimum(50)
+        self.btn_close.clicked.connect(self.close_the_app)
+
+        self.transparent_slider.setTickInterval(100)
+        self.transparent_slider.setMinimum(50)
+        self.transparent_slider.setMaximum(100)
+
+        self.transparent_slider.valueChanged.connect(self.change_transparent)
+        #
+        self.cbb_screen.currentIndexChanged.connect(self.set_screen_current_index)
+        self.btn_qrcode.clicked.connect(self.qrcode_msg_show)
+        self.btn_testing.clicked.connect(self.preview)
+        ##美化 ui
+        self.setWindowOpacity(self.transparent_slider.value() / 100.0)
+        dark_stylesheet = qdarkstyle.load_stylesheet_pyside2()
+        self.setStyleSheet(dark_stylesheet)
+        self.setFixedSize(640, 590)
 
     def detect_screen(self):
         self.cbb_screen.clear()
@@ -334,6 +420,9 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                                              QMessageBox.Yes | QMessageBox.No,
                                              QMessageBox.No)
         if self.reply == QMessageBox.Yes:
+            if self.is_save:
+                self.write()
+
             ngrok.disconnect(self.public_url)
             self.serverThread.stop()
             self.Qrcode_msg.close()
@@ -342,34 +431,15 @@ class MyWindow(QMainWindow, Ui_MainWindow):
     def set_screen_current_index(self):
         self.screen_num = self.cbb_screen.currentIndex()
         self.screenRect = self.desktopWidget.screenGeometry(self.screen_num)
-        # print (self.screenRect)
 
-    def onBindingUI(self):
+    def preview(self):
+        self.w = scrollTextLabel('測試', self.screenRect, self.scale, self.speed, 0, 'Blue', self.isBold.isChecked())
 
-        ###init ui default setting and connect the signals with ui
-        self.checkBox_1.stateChanged.connect(self.checkbox1_changed)
-        self.checkBox_2.stateChanged.connect(self.checkbox2_changed)
-        self.checkBox_3.stateChanged.connect(self.checkbox3_changed)
-        self.Speed_Slider.valueChanged.connect(self.change_label_speed)
-        self.Speed_Slider.setMaximum(120)
-        self.Speed_Slider.setMinimum(50)
-        self.btn_close.clicked.connect(self.close_the_app)
-
-        self.cbb_screen.currentIndexChanged.connect(self.set_screen_current_index)
-        self.btn_qrcode.clicked.connect(self.qrcode_msg_show)
-
-        # u"\u767e\u842c\u5f48\u5e55" 百萬彈幕
-        ##美化 ui
-        self.setWindowOpacity(0.9)
-        dark_stylesheet = qdarkstyle.load_stylesheet_pyside2()
-        self.setStyleSheet(dark_stylesheet)
-        self.setFixedSize(635, 600)
     def qrcode_msg_show(self):
         size = self.Qrcode_msg.geometry()
         self.Qrcode_msg.move(self.screenRect.x() + (self.screenRect.width() - size.width()) / 2,
-                  self.screenRect.y()+(self.screenRect.height() - size.height()) / 2)
+                             self.screenRect.y() + (self.screenRect.height() - size.height()) / 2)
         self.Qrcode_msg.show()
-
 
     def checkbox1_changed(self):
         if self.checkBox_1.checkState() == Qt.Checked:
@@ -398,7 +468,6 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             self.scale = 20  # 小
 
     def change_label_speed(self):
-        self.label_speed.setText(self.Speed_Slider.value().__str__())
         self.speed = self.Speed_Slider.value()
 
     def mousePressEvent(self, event):
