@@ -20,7 +20,6 @@ import queue
 # import ui files
 from ui import Ui_MainWindow
 from qrcode_ui import Ui_Dialog
-from dialog import Dialog
 # for the ui style
 import qdarkstyle
 
