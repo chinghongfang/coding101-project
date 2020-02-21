@@ -1,7 +1,325 @@
-<html>
-<head><title>百萬彈幕</title></head>
-	<frameset rows="50%,*">
-		<frame src="sendBox.html">
-		<frame src="room.html">
-	</frameset>
+<!DOCTYPE html>
+<html style="background-color: #ECFAFB;">
+	<head>
+		<title>百萬彈幕</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		
+		<!-- bootstrap -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		
+		<!-- swiper cdn-->
+		<link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.css">
+		<link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
+
+		<!--meta name="Ching-Hong Fang">
+		<meta name="description" content="coding101 "-->
+	</head>
+	<body style="background-color: #ECFAFB;">
+		<style>
+			body{
+				box-sizing: border-box;
+			}
+			h2{
+				text-align: center;
+			}
+			.swiper-container{
+				width: 80%;
+				height: 80px;
+			}
+			.symbol {
+				color: #4AA6B5;
+				background-color: #ECFAFB;
+				border:0px;
+			}
+			.color_img{
+				width: 25px;
+			}
+		</style>
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-md">
+					<div class="container">
+						<div class="row justify-content-center">
+							<div class="col-sm-4 panel-item">
+								<h2>百萬彈幕</h2>
+							</div>
+						</div>
+					</div>
+			
+					<div class="d-flex">
+						<div class="input-group mb-3" style="padding:5% 5% 0 5%">
+							<input type="text" class="form-control" id="ans" onclick=change_pos() placeholder="" aria-label="Recipient's username" aria-describedby="button-addon2">
+							<div class="input-group-append">
+								<button type="button" class="close" onclick=clean() aria-label="Close">
+									<span class="input-group-text" aria-hidden="true">&times;</span>
+								</button>
+								<input type="image" style="width:40px" onclick=Go() src="https://raw.githubusercontent.com/chinghongfang/html_practice/master/image/client2.png"></input>
+							</div>
+						</div>
+					</div>
+					<div style="text-align:center;"><h4 id="warningMsg" style="color:red; padding: 0 5% 0 5%;"></h4></div>
+					
+					<div class="swiper-container">
+						<!-- Additional required wrapper -->
+						<div class="swiper-wrapper" style="vertical-align:middle">
+							<!-- Slides -->
+							<div class="swiper-slide">
+								<button type="button" class="symbol" onclick=symbol("agree")>贊同</button>
+								</div>
+							<div class="swiper-slide">
+								<button type="button" class="symbol" onclick=symbol("opisite")>反對</button></br>
+								</div>
+							<div class="swiper-slide">
+								<button type="button" class="symbol" onclick=symbol("air_con")>老師可以開冷氣嗎</button>
+								</div>
+							<div class="swiper-slide">
+								<button type="button" class="symbol" onclick=symbol("slower")>老師可以講慢一點嗎</button></br>
+								</div>
+							<div class="swiper-slide">
+								<button type="button" class="symbol" onclick=symbol("again")>可以再講一次嗎</button></br>
+								</div>
+							<div class="swiper-slide">
+								<button type="button" class="symbol" onclick=symbol("break")>老師下課了</button>
+								</div>
+							<div class="swiper-slide">
+								<button type="button" class="symbol" onclick=symbol("lunch")>中午吃啥</button></br>
+								</div>
+							<div class="swiper-slide">
+								<button type="button" class="symbol" onclick=symbol("cold")>冷氣好冷</button></br>
+								</div>
+							<div class="swiper-slide">
+								<button type="button" class="symbol" onclick=symbol("sleepy")>快睡著了</button>
+								</div>
+						</div>
+					</div>
+					
+					<div class="container" style="padding:10% 0% 5% 5%">
+						<div class="row">
+							<div class="col-auto">
+								顏色：
+							</div>
+							<div class="col">
+								<label>
+									<input class="rad" type="radio" name="color" value="red" checked>
+									<image class="color_img" src="https://raw.githubusercontent.com/chinghongfang/html_practice/master/image/red.png">
+								</label>
+								<label>
+									<input class="rad" type="radio" name="color" value="white">
+									<image class="color_img" src="https://raw.githubusercontent.com/chinghongfang/html_practice/master/image/white.png">
+								</label>
+								<label>
+									<input class="rad" type="radio" name="color" value="Grass">
+									<image class="color_img" src="https://raw.githubusercontent.com/chinghongfang/html_practice/master/image/green.png">
+								</label>
+								<label>
+									<input class="rad" type="radio" name="color" value="Blue">
+									<image class="color_img" src="https://raw.githubusercontent.com/chinghongfang/html_practice/master/image/light_blue.png">
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- 聊天室 block -->
+				<div class="col-md align-self-end" style="padding:5%;">
+					<nav id="navbar-example2" class="navbar navbar-light bg-light rounded">
+						<ul class="nav nav-pills">
+							<li class="nav-item">
+								<h4>聊天室</h4>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#top">top</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#bot">bottom</a>
+							</li>
+						</ul>
+					</nav>
+					<div class="shadow rounded" style="overflow-y: scroll;height:200px; background-color: #81CBC8;">
+						<div id="room" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
+							<h4 id="top"></h4>
+							<h4 id="bot"></h4>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		<script>
+			var pos = 0;
+			function change_pos(){
+				pos = document.getElementById('ans').selectionStart;
+				document.getElementById("warningMsg").innerHTML = "";
+			}
+			function symbol(id){
+				let head = document.getElementById('ans').value.slice(0,pos)
+				let tail = document.getElementById('ans').value.slice(pos)
+				let data;
+				switch(id){
+					case "agree":	data = "贊同"; break;
+					case "opisite":	data = "反對"; break;
+					case "air_con":	data = "老師可以開冷氣嗎"; break;
+					case "slower":	data = "老師可以講慢一點嗎"; break;
+					case "again":	data = "可以再講一次嗎"; break;
+					case "break":	data = "老師下課了"; break;
+					case "lunch":	data = "中午吃啥"; break;
+					case "cold":	data = "冷氣好冷"; break;
+					case "sleepy":	data = "快睡著了"; break;
+				}
+				pos += data.length
+				document.getElementById('ans').value = head.concat(data.concat(tail));
+			}
+			function clean(){
+				document.getElementById('ans').value = "";
+				document.getElementById("warningMsg").innerHTML = "";
+			}
+			function getText(){
+				return document.getElementById('ans').value;
+			}
+			let len = location.href.search("#");
+			if (len != -1){
+				len -= 1;
+			}
+			var web_head = location.href.slice(0, len);
+			console.log(web_head);
+			web_head = web_head.replace(/\//g,'');
+			web_head = web_head.replace(/:/g,'');
+			web_head = web_head.replace(/\./g,'');
+			console.log(web_head);
+		</script>
+		
+		<!-- bootstrap script -->
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+		
+		<!-- swiper script -->
+		<script src="https://unpkg.com/swiper/js/swiper.js"></script>
+		<script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
+		<script>
+			var mySwiper = new Swiper ('.swiper-container', {
+				// Optional parameters
+				direction: 'vertical',//'horizontal',
+				loop: false,
+				slidesPerView: 3,
+				spaceBetween: 5,
+			})
+		</script>
+		
+		<!-- firebase -->
+		<script src="https://www.gstatic.com/firebasejs/7.6.0/firebase.js"></script>
+			<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+		<script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-analytics.js"></script>
+			<!-- Add Firebase products that you want to use -->
+		<script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-auth.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-firestore.js"></script>
+		<script>
+			// Your web app's Firebase configuration
+			var firebaseConfig = {
+				apiKey: "AIzaSyBF2uPeIMPhyrmUyKfvTy9n7WkOSI85zmg",
+				authDomain: "practice-2334f.firebaseapp.com",
+				databaseURL: "https://practice-2334f.firebaseio.com",
+				projectId: "practice-2334f",
+				storageBucket: "practice-2334f.appspot.com",
+				messagingSenderId: "906379530813",
+				appId: "1:906379530813:web:f36ce20044f9c8f7111054",
+				measurementId: "G-NK01QHSFQT"
+			};
+			// Initialize Firebase
+			firebase.initializeApp(firebaseConfig);
+			firebase.analytics();
+			// Get a reference to the database service
+			var database = firebase.database();
+			
+			/* ******** For chatroom *******************************************/
+			firebase.database().ref('/chatroom').once('value').then(function(snapshot) {
+				console.log(snapshot.val());
+				// to check if the room exists
+				if (snapshot.val().hasOwnProperty(web_head)){
+					return;
+				}
+				firebase.database().ref('/chatroom/'+web_head).set({1234:1});
+			});
+			
+			function updateroom(time_stamp){
+				time_stamp = time_stamp[web_head];
+				let keys = Object.keys(time_stamp);
+				let all_text = "";
+				keys.forEach(function(key){
+					if (time_stamp[key]["message"]){
+						all_text += "<p>"+time_stamp[key]["message"]+"</p>";
+					}
+				});
+				document.getElementById("room").innerHTML = "<h4 id='top'></h4>"+ all_text + "<h4 id='bot'></h4>";
+			}
+			var chatroomRef = firebase.database().ref('/chatroom/');
+			chatroomRef.on('value', function(snapshot) {
+				updateroom(snapshot.val());
+			});
+			
+			/* ******** For sending message to server and firebase *************/
+			function Go(){
+				let text_to_send = document.getElementById('ans').value
+				if (text_to_send.length > 20){
+					document.getElementById("warningMsg").innerHTML = "不能超過20字";
+					return;
+				}
+				
+				handleClick()
+				
+				document.getElementById('ans').value = "";
+				// send something to server
+				var d = new Date();
+				let time = d.getTime();
+				
+				// get color radio box
+				let colors = document.getElementsByName('color');
+				let color;
+				for (let i = 0; i< colors.length; ++i){
+					if (colors[i].checked){
+						color = colors[i].value;
+						break;
+					}
+				}
+				
+				firebase.database().ref('/chatroom/'+web_head+'/'+time).set({
+					message: text_to_send,
+					color:	color
+				});
+				
+			}
+			const handleClick=()=>{
+				// get color radio box
+				let colors = document.getElementsByName('color');
+				let color;
+				for (let i = 0; i< colors.length; ++i){
+					if (colors[i].checked){
+						color = colors[i].value;
+						break;
+					}
+				}
+
+				var data={text:getText(), color:color};
+
+    			fetch( '/response',{
+					method:"POST",
+					body:JSON.stringify(data),
+					headers: new Headers({
+            					'Content-Type': 'application/json'
+        				})
+					 })
+    			.then(res => res.json())
+    			.then(data => {//i know
+          			
+    			})
+    			.catch(e => {
+        			console.log(e);
+    			})
+			}
+		</script>
+		
+	</body>
 </html>
