@@ -55,7 +55,7 @@
 								<button type="button" class="close" onclick=clean() aria-label="Close">
 									<span class="input-group-text" aria-hidden="true">&times;</span>
 								</button>
-								<input type="image" style="width:40px height:40px;" onclick=Go() src="https://raw.githubusercontent.com/chinghongfang/html_practice/master/image/client2.png"></input>
+								<input type="image" style="width:40px; height:40px;" onclick=Go() src="https://raw.githubusercontent.com/chinghongfang/html_practice/master/image/client2.png"></input>
 							</div>
 						</div>
 					</div>
@@ -137,7 +137,7 @@
 							</li>
 						</ul>
 					</nav>
-					<div class="shadow rounded" style="overflow-y: scroll;height:200px; background-color: #81CBC8;">
+					<div class="shadow rounded" style="overflow-y: scroll;height:200px; background-color: #81CBC8;"onmouseover="mouseOver()" onmouseout="mouseOut()" ontouchstart="mouseOver()" ontouchend="mouseOut()">
 						<div id="room" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
 							<h4 id="top"></h4>
 							<h4 id="bot"></h4>
@@ -149,7 +149,8 @@
 		
 		
 		<script>
-			var pos = 0;
+			var pos = 0;		// the position to enter words in the send-box
+			var on_room = false;	// on mouse over boolean value
 			function change_pos(){
 				pos = document.getElementById('ans').selectionStart;
 				document.getElementById("warningMsg").innerHTML = "";
@@ -179,7 +180,17 @@
 			function getText(){
 				return document.getElementById('ans').value;
 			}
-			let len = location.href.search("#");
+			function mouseOver(){
+				on_room = true;
+			}
+			function mouseOut(){
+				on_room = false;
+			}
+			
+			// Try to get the web url
+			// the url may be: https://123456#top || https://123456#bot || https://123456
+			// and we want https123456 to be our
+			let len = location.href.search("#");	
 			if (len != -1){
 				len -= 1;
 			}
@@ -254,11 +265,13 @@
 					}
 				});
 				document.getElementById("room").innerHTML = "<h4 id='top'></h4>"+ all_text + "<h4 id='bot'></h4>";
+				if (!on_room){location.href = "#bot";}
 			}
 			var chatroomRef = firebase.database().ref('/chatroom/');
 			chatroomRef.on('value', function(snapshot) {
 				updateroom(snapshot.val());
 			});
+			/* ******** For chatroom *******************************************/
 			
 			/* ******** For sending message to server and firebase *************/
 			function Go(){
