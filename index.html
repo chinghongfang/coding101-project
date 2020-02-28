@@ -187,6 +187,17 @@
 				on_room = false;
 			}
 			
+			// execute Go() function when pressing enter and focusing on input box
+			document.getElementById("ans").addEventListener("keyup", function(event){
+				// 13 is the code of enter key
+				console.log(event.keyCode);
+				if (event.keyCode === 13){
+					// Cancel the default action
+					event.preventDefault();
+					Go();
+				}
+			});
+			
 			// Try to get the web url
 			// the url may be: https://123456#top || https://123456#bot || https://123456
 			// and we want https123456 to be our
