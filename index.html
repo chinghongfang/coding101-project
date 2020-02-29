@@ -190,7 +190,6 @@
 			// execute Go() function when pressing enter and focusing on input box
 			document.getElementById("ans").addEventListener("keyup", function(event){
 				// 13 is the code of enter key
-				console.log(event.keyCode);
 				if (event.keyCode === 13){
 					// Cancel the default action
 					event.preventDefault();
@@ -206,7 +205,7 @@
 				len -= 1;
 			}
 			var web_head = location.href.slice(0, len);
-			console.log(web_head);
+			//console.log(web_head);
 			web_head = web_head.replace(/\//g,'');
 			web_head = web_head.replace(/:/g,'');
 			web_head = web_head.replace(/\./g,'');
@@ -289,6 +288,8 @@
 				let text_to_send = document.getElementById('ans').value
 				if (text_to_send.length > 20){
 					document.getElementById("warningMsg").innerHTML = "不能超過20字";
+					return;
+				}else if (text_to_send.length == 0){
 					return;
 				}
 				
