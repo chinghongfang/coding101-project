@@ -209,6 +209,7 @@ class MyPopup(QDialog, Ui_Dialog):
         self.setupUi(self)
         dark_stylesheet = qdarkstyle.load_stylesheet_pyside2()
         self.setStyleSheet(dark_stylesheet)
+        self.setWindowTitle(" ")
         self.link = ''
         self.setWindowFlags(
             Qt.WindowStaysOnTopHint |
@@ -287,6 +288,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.setWindowFlags(
             Qt.FramelessWindowHint |
             Qt.WindowCloseButtonHint)
+
         # default setting
 
         self.screen_num = 0  # default setting is main screen
