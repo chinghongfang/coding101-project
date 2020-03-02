@@ -24,8 +24,12 @@
 				text-align: center;
 			}
 			.swiper-container{
-				width: 80%;
-				height: 80px;
+				width: 90%;
+				height: 100px;
+			}
+			.swiper-row{
+				width: 90%;
+				height: 100px;
 			}
 			.symbol {
 				color: #4AA6B5;
@@ -39,11 +43,11 @@
 		
 		<div class="container">
 			<div class="row">
-				<div class="col-md">
+				<div class="col-md-6">
 					<div class="container">
 						<div class="row justify-content-center">
 							<div class="col-sm-4 panel-item">
-								<h2>百萬彈幕</h2>
+								<h2><b>百萬彈幕</b></h2>
 							</div>
 						</div>
 					</div>
@@ -62,36 +66,91 @@
 					<div style="text-align:center;"><h4 id="warningMsg" style="color:red; padding: 0 5% 0 5%;"></h4></div>
 					
 					<div class="swiper-container">
-						<!-- Additional required wrapper -->
-						<div class="swiper-wrapper" style="vertical-align:middle">
-							<!-- Slides -->
+						<div class="swiper-wrapper">
 							<div class="swiper-slide">
-								<button type="button" class="symbol" onclick=symbol("agree")>贊同</button>
+								<div class="swiper-row">
+									<!-- Additional required wrapper -->
+									<div class="swiper-wrapper" style="vertical-align:middle">
+										<!-- Slides -->
+										<div class="swiper-slide">
+											<button type="button" class="symbol" onclick=symbol("贊同")>贊同</button>
+											</div>
+										<div class="swiper-slide">
+											<button type="button" class="symbol" onclick=symbol("反對")>反對</button></br>
+											</div>
+										<div class="swiper-slide">
+											<button type="button" class="symbol" onclick=symbol("slower")>老師可以講慢一點嗎</button></br>
+											</div>
+										<div class="swiper-slide">
+											<button type="button" class="symbol" onclick=symbol("again")>可以再講一次嗎</button></br>
+											</div>
+										<div class="swiper-slide">
+											<button type="button" class="symbol" onclick=symbol("選項(1)")>選項(1)</button>
+											</div>
+										<div class="swiper-slide">
+											<button type="button" class="symbol" onclick=symbol("選項(2)")>選項(2)</button>
+											</div>
+										<div class="swiper-slide">
+											<button type="button" class="symbol" onclick=symbol("選項(3)")>選項(3)</button></br>
+											</div>
+										<div class="swiper-slide">
+											<button type="button" class="symbol" onclick=symbol("選項(4)")>選項(4)</button>
+											</div>
+										<div class="swiper-slide">
+											<button type="button" class="symbol" onclick=symbol("cold")>冷氣好冷</button></br>
+											</div>
+									</div>
 								</div>
+							</div>
 							<div class="swiper-slide">
-								<button type="button" class="symbol" onclick=symbol("opisite")>反對</button></br>
+								<div class="symbol-btn">
+									<button type="button" class="symbol" title="積分" onclick=symbol("∫")>∫</button>
+									<button type="button" class="symbol" title="環積分" onclick=symbol("∮")>∮</button>
+									<button type="button" class="symbol" title="dx" onclick=symbol("dx")>dx</button>
+									<button type="button" class="symbol" title="Sigma" onclick=symbol("∑()")>∑</button>
+									<button type="button" class="symbol" title="圓周率" onclick=symbol("π")>π</button>
+									<button type="button" class="symbol" title="極限" onclick=symbol("lim")>lim</button>
+									<button type="button" class="symbol" title="正弦" onclick=symbol("sin()")>sin</button>
+									<button type="button" class="symbol" title="餘弦" onclick=symbol("cos()")>cos</button>
+									<button type="button" class="symbol" title="正切" onclick=symbol("tan()")>tan</button>
+									<button type="button" class="symbol" title="餘切" onclick=symbol("cot()")>cot</button>
+									<button type="button" class="symbol" title="正割" onclick=symbol("sec()")>sec</button>
+									<button type="button" class="symbol" title="餘割" onclick=symbol("csc()")>csc</button>
+									
+									<button type="button" class="symbol" title="正負" onclick=symbol("±")>±</button>
+									<button type="button" class="symbol" title="無限" onclick=symbol("∞")>∞</button>
+									<button type="button" class="symbol" title="不等於" onclick=symbol("≠")>≠</button>
+									<button type="button" class="symbol" title="小於等於"onclick=symbol("≤")>≤</button>
+									<button type="button" class="symbol" title="大於等於" onclick=symbol("≥")>≥</button>
+									<button type="button" class="symbol" title="約等於" onclick=symbol("≈")>≈</button>
+									<button type="button" class="symbol" title="等價" onclick=symbol("≡")>≡</button>
+									<button type="button" class="symbol" title="partial" onclick=symbol("∂")>∂</button>
+									<button type="button" class="symbol" title="開根" onclick=symbol("√")>√</button>
+									<button type="button" class="symbol" title="聯集" onclick=symbol("∪")>∪</button>
+									<button type="button" class="symbol" title="交集" onclick=symbol("∩")>∩</button>
+									<button type="button" class="symbol" title="delta" onclick=symbol("∆")>∆</button>
+									<button type="button" class="symbol" title="趨近" onclick=symbol("→")>→</button>
+									<button type="button" class="symbol" title="因為" onclick=symbol("∵")>∵</button>
+									<button type="button" class="symbol" title="所以" onclick=symbol("∴")>∴</button>
+									<!--
+									<button type="button" class="symbol" onclick=symbol("α")>α</button>
+									<button type="button" class="symbol" onclick=symbol("β")>β</button>
+									<button type="button" class="symbol" onclick=symbol("γ")>γ</button>
+									<button type="button" class="symbol" onclick=symbol("δ")>δ</button>
+									<button type="button" class="symbol" onclick=symbol("ε")>ε</button>
+									<button type="button" class="symbol" onclick=symbol("ϵ")>ϵ</button>
+									<button type="button" class="symbol" onclick=symbol("θ")>θ</button>
+									<button type="button" class="symbol" onclick=symbol("ϑ")>ϑ</button>
+									<button type="button" class="symbol" onclick=symbol("μ")>μ</button>
+									<button type="button" class="symbol" onclick=symbol("π")>π</button>
+									<button type="button" class="symbol" onclick=symbol("ρ")>ρ</button>
+									<button type="button" class="symbol" onclick=symbol("σ")>σ</button>
+									<button type="button" class="symbol" onclick=symbol("τ")>τ</button>
+									<button type="button" class="symbol" onclick=symbol("φ")>φ</button>
+									<button type="button" class="symbol" onclick=symbol("ω")>ω</button>
+									-->
 								</div>
-							<div class="swiper-slide">
-								<button type="button" class="symbol" onclick=symbol("air_con")>老師可以開冷氣嗎</button>
-								</div>
-							<div class="swiper-slide">
-								<button type="button" class="symbol" onclick=symbol("slower")>老師可以講慢一點嗎</button></br>
-								</div>
-							<div class="swiper-slide">
-								<button type="button" class="symbol" onclick=symbol("again")>可以再講一次嗎</button></br>
-								</div>
-							<div class="swiper-slide">
-								<button type="button" class="symbol" onclick=symbol("break")>老師下課了</button>
-								</div>
-							<div class="swiper-slide">
-								<button type="button" class="symbol" onclick=symbol("lunch")>中午吃啥</button></br>
-								</div>
-							<div class="swiper-slide">
-								<button type="button" class="symbol" onclick=symbol("cold")>冷氣好冷</button></br>
-								</div>
-							<div class="swiper-slide">
-								<button type="button" class="symbol" onclick=symbol("sleepy")>快睡著了</button>
-								</div>
+							</div>
 						</div>
 					</div>
 					
@@ -123,17 +182,17 @@
 				</div>
 				
 				<!-- 聊天室 block -->
-				<div class="col-md align-self-end" style="padding:5%;">
+				<div class="col-md-6 align-self-end" style="padding:5%;">
 					<nav id="navbar-example2" class="navbar navbar-light bg-light rounded">
 						<ul class="nav nav-pills">
 							<li class="nav-item">
 								<h4>聊天室</h4>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#top">top</a>
+								<a class="nav-link" href="#top">置頂</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#bot">bottom</a>
+								<a class="nav-link" href="#bot">置底</a>
 							</li>
 						</ul>
 					</nav>
@@ -146,6 +205,13 @@
 				</div>
 			</div>
 		</div>
+		<footer class="nav-fixed-bottom">
+			<div class="container">
+				<div class="d-flex flex-row-reverse" >
+					<span class="text-muted"style="text-align:left">Designed by 鮪魚蛋土司</span>
+				</div>
+			</div>
+		</footer>
 		
 		
 		<script>
@@ -155,21 +221,9 @@
 				pos = document.getElementById('ans').selectionStart;
 				document.getElementById("warningMsg").innerHTML = "";
 			}
-			function symbol(id){
+			function symbol(data){
 				let head = document.getElementById('ans').value.slice(0,pos)
 				let tail = document.getElementById('ans').value.slice(pos)
-				let data;
-				switch(id){
-					case "agree":	data = "贊同"; break;
-					case "opisite":	data = "反對"; break;
-					case "air_con":	data = "老師可以開冷氣嗎"; break;
-					case "slower":	data = "老師可以講慢一點嗎"; break;
-					case "again":	data = "可以再講一次嗎"; break;
-					case "break":	data = "老師下課了"; break;
-					case "lunch":	data = "中午吃啥"; break;
-					case "cold":	data = "冷氣好冷"; break;
-					case "sleepy":	data = "快睡著了"; break;
-				}
 				pos += data.length
 				document.getElementById('ans').value = head.concat(data.concat(tail));
 			}
@@ -199,17 +253,15 @@
 			
 			// Try to get the web url
 			// the url may be: https://123456#top || https://123456#bot || https://123456
-			// and we want https123456 to be our
+			// and we want https123456 to be our web_head
 			let len = location.href.search("#");	
 			if (len != -1){
 				len -= 1;
 			}
 			var web_head = location.href.slice(0, len);
-			//console.log(web_head);
 			web_head = web_head.replace(/\//g,'');
 			web_head = web_head.replace(/:/g,'');
 			web_head = web_head.replace(/\./g,'');
-			console.log(web_head);
 		</script>
 		
 		<!-- bootstrap script -->
@@ -221,11 +273,16 @@
 		<script src="https://unpkg.com/swiper/js/swiper.js"></script>
 		<script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
 		<script>
-			var mySwiper = new Swiper ('.swiper-container', {
+			var rowSwiper = new Swiper('.swiper-container', {
+				direction: 'horizontal',
+				loop: false,
+				slidesPerView: 1,
+			})
+			var mySwiper = new Swiper ('.swiper-row', {
 				// Optional parameters
 				direction: 'vertical',//'horizontal',
 				loop: false,
-				slidesPerView: 3,
+				slidesPerView: 4,
 				spaceBetween: 5,
 			})
 		</script>
@@ -257,7 +314,7 @@
 			
 			/* ******** For chatroom *******************************************/
 			firebase.database().ref('/chatroom').once('value').then(function(snapshot) {
-				console.log(snapshot.val());
+				//console.log(snapshot.val());
 				// to check if the room exists
 				if (snapshot.val().hasOwnProperty(web_head)){
 					return;
