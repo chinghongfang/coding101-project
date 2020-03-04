@@ -405,7 +405,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.setWindowOpacity(self.transparent_slider.value() / 100.0)
         dark_stylesheet = qdarkstyle.load_stylesheet_pyside2()
         self.setStyleSheet(dark_stylesheet)
-        self.setFixedSize(640, 590)
+        self.setFixedSize(640, 600)
 
     def detect_screen(self):
         self.cbb_screen.clear()
